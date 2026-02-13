@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>👩‍🍳🌟 奇青食堂 · 点菜Order</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+        }
+        body {
+            background: #fef3e4;
+            padding: 16px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 20px rgba(185,91,61,0.1);
+            border: 1px solid #ffd9b5;
+        }
+        h1 {
+            color: #b85b3a;
+            font-size: 32px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 8px solid #ff9933;
+            padding-left: 16px;
+        }
+        .sub {
+            color: #8a6e5b;
+            margin-bottom: 24px;
+            font-size: 18px;
+            padding-left: 24px;
+        }
+        .category {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6b4a36;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #ffccaa;
+        }
+        .dish-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #fff9f2;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            border: 1px solid #ffe8da;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .dish-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #4d3427;
+            flex: 1;
+        }
+        .order-btn {
+            background: #b85b3a;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #7e3e28;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .order-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #7e3e28;
+        }
+        .cart-area {
+            background: #fff3e9;
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 30px;
+        }
+        .cart-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #5a3f31;
+            margin-bottom: 16px;
+        }
+        .selected-dish {
+            background: white;
+            padding: 14px 20px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ffc7a0;
+        }
+        .remove-btn {
+            color: #999;
+            font-size: 24px;
+            background: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .input-field {
+            width: 100%;
+            padding: 18px 24px;
+            border: 2px solid #ffd9bf;
+            border-radius: 50px;
+            font-size: 18px;
+            margin: 16px 0;
+            background: white;
+        }
+        .submit-btn {
+            width: 100%;
+            background: #b85b3a;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #7e3e28;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .submit-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #7e3e28;
+        }
+        .empty-cart {
+            padding: 30px;
+            text-align: center;
+            color: #9b7b67;
+            font-size: 18px;
+        }
+        .no-menu {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a28e7c;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1> 👩‍🍳🌟 奇青食堂</h1>
+    <div class="sub">—— 家的味道，小厨上线</div>
+    
+    <!-- 菜单容器 -->
+    <div id="menuContainer"></div>
+    <div id="noMenuMsg" class="no-menu" style="display:none;">
+        🥢 小食堂正在更新菜单，稍等再来点菜吧～
+    </div>
+    
+    <!-- 点餐区域 -->
+    <div class="cart-area">
+        <div class="cart-title">🛒 您点的菜</div>
+        <div id="cartList"></div>
+        
+        <input type="text" class="input-field" id="customerName" placeholder="您的称呼（如：奇青）">
+        
+        <button class="submit-btn" onclick="submitOrder()">📲 点击下单</button>
+    </div>
+</div>
+
+<script>
+    // ========== 购物车 ==========
+    let cart = [];
+    
+    // ========== 从奇青那边读取菜单 ==========
+    function loadMenu() {
+        const savedMenu = localStorage.getItem('nainai_menu');
+        if (savedMenu) {
+            return JSON.parse(savedMenu);
+        }
+        return [];  // 没有菜单就返回空数组
+    }
+    
+    // ========== 读取分类 ==========
+    function loadCategories() {
+        const savedCats = localStorage.getItem('nainai_categories');
+        if (savedCats) {
+            return JSON.parse(savedCats);
+        }
+        return ['肉类', '菜类', '饮料', '甜品'];  // 默认分类
+    }
+    
+    // ========== 渲染菜单 ==========
+    function renderMenu() {
+        const menu = loadMenu();
+        const categories = loadCategories();
+        const container = document.getElementById('menuContainer');
+        const noMenuMsg = document.getElementById('noMenuMsg');
+        
+        if (menu.length === 0) {
+            container.innerHTML = '';
+            noMenuMsg.style.display = 'block';
+            return;
+        }
+        
+        noMenuMsg.style.display = 'none';
+        
+        let html = '';
+        
+        // 按分类显示
+        categories.forEach(cat => {
+            const dishesInCat = menu.filter(dish => dish.category === cat);
+            if (dishesInCat.length === 0) return;
+            
+            html += `<div class="category">${cat}</div>`;
+            
+            dishesInCat.forEach(dish => {
+                html += `
+                    <div class="dish-item">
+                        <span class="dish-name">${dish.name}</span>
+                        <button class="order-btn" onclick="addToCart('${dish.name}')">点这个</button>
+                    </div>
+                `;
+            });
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // ========== 购物车操作 ==========
+    window.addToCart = function(dishName) {
+        cart.push(dishName);
+        renderCart();
+    };
+    
+    window.removeFromCart = function(index) {
+        cart.splice(index, 1);
+        renderCart();
+    };
+    
+    function renderCart() {
+        const cartList = document.getElementById('cartList');
+        if (!cartList) return;
+        
+        if (cart.length === 0) {
+            cartList.innerHTML = '<div class="empty-cart">🛒 还没有点菜，点上面的【点这个】加菜</div>';
+            return;
+        }
+        
+        let html = '';
+        cart.forEach((dish, index) => {
+            html += `
+                <div class="selected-dish">
+                    <span style="font-size:20px; font-weight:600;">${dish}</span>
+                    <button class="remove-btn" onclick="removeFromCart(${index})">✕</button>
+                </div>
+            `;
+        });
+        cartList.innerHTML = html;
+    }
+    
+    // ========== 提交订单 ==========
+    window.submitOrder = function() {
+        const customer = document.getElementById('customerName').value.trim();
+        
+        if (cart.length === 0) {
+            alert('还没有点菜呢');
+            return;
+        }
+        
+        if (customer === '') {
+            alert('请填上您的称呼，食堂才知道是谁点的');
+            return;
+        }
+        
+        // 生成订单
+        const order = {
+            person: customer,
+            items: [...cart],
+            time: new Date().toLocaleString('zh-CN', {hour12: false})
+        };
+        
+        // 读取现有订单
+        let orders = [];
+        const savedOrders = localStorage.getItem('nainai_orders');
+        if (savedOrders) {
+            orders = JSON.parse(savedOrders);
+        }
+        
+        // 添加新订单
+        orders.unshift(order);
+        
+        // 保存
+        localStorage.setItem('nainai_orders', JSON.stringify(orders));
+        
+        // 清空购物车
+        cart = [];
+        document.getElementById('customerName').value = '';
+        renderCart();
+        
+        alert('✅ 下单成功！食堂收到啦');
+    };
+    
+    // ========== 定时刷新菜单（食堂更新了，孩子这边马上能看到） ==========
+    function startAutoRefresh() {
+        renderMenu();  // 先渲染一次
+        
+        // 每3秒检查一次菜单有没有变化
+        setInterval(function() {
+            renderMenu();
+        }, 3000);
+    }
+    
+    // ========== 启动 ==========
+    window.onload = function() {
+        startAutoRefresh();
+        renderCart();
+    };
+</script>
+</body>
+</html>
