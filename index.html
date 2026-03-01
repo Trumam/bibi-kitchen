@@ -1,550 +1,322 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-    <title>👩‍🍳🌟编辑菜单 · 后台</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-        }
-        body {
-            background: #fef3e4;
-            padding: 16px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 32px;
-            padding: 24px 20px;
-            box-shadow: 0 8px 20px rgba(185,91,61,0.1);
-            border: 1px solid #ffd9b5;
-        }
-        h1 {
-            color: #b85b3a;
-            font-size: 32px;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 8px solid #ff9933;
-            padding-left: 16px;
-        }
-        .sub {
-            color: #8a6e5b;
-            margin-bottom: 24px;
-            font-size: 18px;
-            padding-left: 24px;
-        }
-        .card {
-            background: #fff9f2;
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 24px;
-            border: 1px solid #ffe1c6;
-        }
-        .card-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #6b4a36;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .input-group {
-            margin-bottom: 16px;
-        }
-        label {
-            display: block;
-            font-size: 18px;
-            font-weight: 600;
-            color: #5a3f31;
-            margin-bottom: 8px;
-        }
-        input, select {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #ffd9bf;
-            border-radius: 50px;
-            font-size: 18px;
-            background: white;
-        }
-        .btn {
-            background: #b85b3a;
-            color: white;
-            border: none;
-            padding: 16px 28px;
-            border-radius: 50px;
-            font-size: 20px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 8px;
-            box-shadow: 0 6px 0 #7e3e28;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        .btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #7e3e28;
-        }
-        .btn-small {
-            background: #e6b89c;
-            color: #3d2b1f;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .category-section {
-            background: #fff3e9;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .category-name {
-            font-size: 22px;
-            font-weight: bold;
-            color: #b85b3a;
-        }
-        .dish-list {
-            margin-top: 12px;
-        }
-        .dish-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 14px 18px;
-            border-radius: 40px;
-            margin-bottom: 8px;
-            border: 1px solid #ffd9bf;
-        }
-        .dish-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: #4d3427;
-        }
-        .delete-btn {
-            background: #f0c0a0;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
-            font-size: 20px;
-            color: #6b3a2a;
-            cursor: pointer;
-        }
-        .tab-bar {
-            display: flex;
-            margin-bottom: 20px;
-            background: #fae9dd;
-            border-radius: 50px;
-            padding: 6px;
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 14px 0;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #7a5a48;
-            cursor: pointer;
-        }
-        .tab.active {
-            background: #b85b3a;
-            color: white;
-        }
-        .warning {
-            background: #fff1d6;
-            padding: 20px;
-            border-radius: 20px;
-            color: #7e5a41;
-            font-size: 18px;
-            margin-top: 20px;
-            border-left: 8px solid #ff9933;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>食堂菜单管理</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
+    body { background-color: #fff5ef; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { padding: 12px 24px; border: none; border-radius: 40px; font-size: 18px; cursor: pointer; background: #e0a28e; color: white; }
+    .tab-btn.active { background: #b85b3a; }
+    .page { display: none; background: white; padding: 24px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .page.active { display: block; }
+    .input-group { margin-bottom: 20px; }
+    input, select { width: 100%; padding: 16px; border: 2px solid #ffd9bf; border-radius: 12px; font-size: 18px; margin-top: 8px; }
+    button { background: #b85b3a; color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 18px; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #9a4a2d; }
+    .category-section { margin-bottom: 30px; }
+    .category-header { font-size: 24px; font-weight: bold; color: #b85b3a; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #ffd9bf; }
+    .dish-list { display: flex; flex-wrap: wrap; gap: 12px; }
+    .dish-item { background: #fff2e7; padding: 12px 20px; border-radius: 40px; display: flex; align-items: center; gap: 10px; }
+    .delete-btn { background: #ff6b6b; border: none; width: 28px; height: 28px; border-radius: 50%; padding: 0; font-size: 16px; cursor: pointer; }
+    #emptyMenu, #noOrders { text-align: center; padding: 40px; color: #a28e7c; font-size: 20px; }
+    .category-list { display: flex; flex-direction: column; gap: 12px; }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>👩‍🍳🌟 食堂菜单编辑</h1>
-    <div class="sub">—— 您的拿手菜，您说了算</div>
-    
+  <div class="container">
     <div class="tab-bar">
-        <div class="tab active" id="tabEdit" onclick="switchTab('edit')">📝 编辑菜单</div>
-        <div class="tab" id="tabCategory" onclick="switchTab('category')">🏷️ 编辑分类</div>
-        <div class="tab" id="tabOrders" onclick="switchTab('orders')">📦 看订单</div>
+      <button id="tabEdit" class="tab-btn active" onclick="switchTab('edit')">编辑菜单</button>
+      <button id="tabCategory" class="tab-btn" onclick="switchTab('category')">分类管理</button>
+      <button id="tabOrders" class="tab-btn" onclick="switchTab('orders')">查看订单</button>
     </div>
-    
-    <!-- ===== 页面1：编辑菜品 ===== -->
-    <div id="pageEdit">
-        <div class="card">
-            <div class="card-title">➕ 添加新拿手菜</div>
-            <div class="input-group">
-                <label>菜名</label>
-                <input type="text" id="dishName" placeholder="如：红烧肉">
-            </div>
-            <div class="input-group">
-                <label>分类</label>
-                <select id="dishCategory"></select>
-            </div>
-            <button class="btn" onclick="addDish()">✅ 保存这道菜</button>
-        </div>
-        
-        <div class="card">
-            <div class="card-title">📖 当前菜单</div>
-            <div id="menuContainer"></div>
-            <div id="emptyMenu" style="text-align:center; padding:30px; color:#a28e7c; font-size:18px; display:none;">
-                🥢 还没有菜，快把拿手菜加进来吧～
-            </div>
-        </div>
-    </div>
-    
-    <!-- ===== 页面2：编辑分类 ===== -->
-    <div id="pageCategory" style="display:none;">
-        <div class="card">
-            <div class="card-title">🏷️ 新增分类</div>
-            <div class="input-group">
-                <label>分类名称</label>
-                <input type="text" id="newCategory" placeholder="如：汤类、主食、凉菜">
-            </div>
-            <button class="btn" onclick="addCategory()">➕ 添加分类</button>
-        </div>
-        
-        <div class="card">
-            <div class="card-title">📌 现有分类</div>
-            <div id="categoryList"></div>
-            <div class="warning">
-                💡 提示：删除分类时，该分类下的菜品也会被一起删除哦
-            </div>
-        </div>
-    </div>
-    
-    <!-- ===== 页面3：查看订单 ===== -->
-    <div id="pageOrders" style="display:none;">
-        <div class="card">
-            <div class="card-title">🧾 家人下的订单</div>
-            <div id="ordersList"></div>
-            <div id="noOrders" style="text-align:center; padding:40px 0; color:#a28e7c; font-size:18px;">
-                🍲 还没有新订单……家人点菜的文件发出去了吗？
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    // ========== 数据管理 ==========
-    // 默认分类
-    const DEFAULT_CATEGORIES = ['肉类', '菜类', '饮料', '甜品'];
-    
-    // 当前分类
+    <!-- 编辑菜单页面 -->
+    <div id="pageEdit" class="page" style="display: block;">
+      <div class="input-group">
+        <h3 style="margin-bottom: 10px; color: #b85b3a;">添加新菜品</h3>
+        <input type="text" id="dishName" placeholder="输入菜名（如：红烧肉）">
+        <select id="dishCategory" style="margin-top: 10px;">
+          <!-- 分类选项由JS渲染 -->
+        </select>
+        <button onclick="addDish()">添加菜品</button>
+      </div>
+      <div id="emptyMenu" style="display: block;">
+        📝 还没有添加菜品，点击上方输入框添加吧！
+      </div>
+      <div id="menuContainer" class="menu-container"></div>
+    </div>
+
+    <!-- 分类管理页面 -->
+    <div id="pageCategory" class="page">
+      <div class="input-group">
+        <h3 style="margin-bottom: 10px; color: #b85b3a;">添加新分类</h3>
+        <input type="text" id="newCategory" placeholder="输入分类名称（如：主食）">
+        <button onclick="addCategory()">添加分类</button>
+      </div>
+      <div id="categoryList" class="category-list"></div>
+    </div>
+
+    <!-- 查看订单页面 -->
+    <div id="pageOrders" class="page">
+      <div id="noOrders" style="display: block;">
+        📦 还没有订单，等待食客下单吧！
+      </div>
+      <div id="ordersList" class="orders-list"></div>
+    </div>
+  </div>
+
+  <script>
+    // ========== 配置后端地址（替换为你的 Render 地址） ==========
+    const BACKEND_URL = "https://bibi-kitchen.onrender.com/api/data";
+
+    // ========== 全局数据 ==========
     let categories = [];
-    
-    // 当前菜单
     let menu = [];
-    
-    // 订单列表
     let orders = [];
-    
-    // ========== 初始化 ==========
-    function loadData() {
-        // 读取分类
-        const savedCats = localStorage.getItem('nainai_categories');
-        if (savedCats) {
-            categories = JSON.parse(savedCats);
+
+    // ========== 核心接口：读取/保存数据 ==========
+    // 从后端读取所有数据
+    async function fetchDataFromBackend() {
+      try {
+        const response = await fetch(BACKEND_URL);
+        if (!response.ok) throw new Error("后端连接失败");
+        const data = await response.json();
+        // 更新全局数据
+        categories = data.categories || ["肉类", "菜类", "饮料", "甜品"];
+        menu = data.menu || [];
+        orders = data.orders || [];
+        console.log("✅ 从后端加载数据成功");
+      } catch (err) {
+        alert("⚠️ 连接后端失败，将使用本地临时数据（刷新后丢失）");
+        console.error("读取后端数据失败：", err);
+        // 降级使用本地默认数据
+        categories = ["肉类", "菜类", "饮料", "甜品"];
+        menu = [];
+        orders = [];
+      }
+    }
+
+    // 保存所有数据到后端
+    async function saveDataToBackend() {
+      const postData = { menu, categories, orders };
+      try {
+        const response = await fetch(BACKEND_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(postData)
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert("✅ 数据保存成功！");
         } else {
-            categories = [...DEFAULT_CATEGORIES];
-            saveCategories();
+          throw new Error("保存失败");
         }
-        
-        // 读取菜单
-        const savedMenu = localStorage.getItem('nainai_menu');
-        if (savedMenu) {
-            menu = JSON.parse(savedMenu);
-        }
-        
-        // 读取订单
-        const savedOrders = localStorage.getItem('nainai_orders');
-        if (savedOrders) {
-            orders = JSON.parse(savedOrders);
-        }
+      } catch (err) {
+        alert("⚠️ 保存到后端失败，请重试");
+        console.error("保存数据失败：", err);
+      }
     }
-    
-    function saveCategories() {
-        localStorage.setItem('nainai_categories', JSON.stringify(categories));
-    }
-    
-    function saveMenu() {
-        localStorage.setItem('nainai_menu', JSON.stringify(menu));
-    }
-    
-    function saveOrders() {
-        localStorage.setItem('nainai_orders', JSON.stringify(orders));
-    }
-    
+
     // ========== 分类管理 ==========
     function renderCategorySelect() {
-        const select = document.getElementById('dishCategory');
-        if (!select) return;
-        
-        let html = '';
-        categories.forEach(cat => {
-            html += `<option value="${cat}">${cat}</option>`;
-        });
-        select.innerHTML = html;
+      const select = document.getElementById('dishCategory');
+      if (!select) return;
+      let html = '';
+      categories.forEach(cat => {
+        html += `<option value="${cat}">${cat}</option>`;
+      });
+      select.innerHTML = html;
     }
-    
+
     function renderCategoryList() {
-        const container = document.getElementById('categoryList');
-        if (!container) return;
-        
-        if (categories.length === 0) {
-            container.innerHTML = '<div style="padding:30px; text-align:center; color:#a28e7c;">暂无分类，请添加</div>';
-            return;
-        }
-        
-        let html = '';
-        categories.forEach((cat, index) => {
-            // 统计该分类下有多少菜
-            const count = menu.filter(dish => dish.category === cat).length;
-            
-            html += `
-                <div style="background:white; border-radius:20px; padding:16px; margin-bottom:12px; border:1px solid #ffd9bf;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:22px; font-weight:bold; color:#b85b3a;">${cat}</span>
-                        <span style="background:#f0d5c0; padding:8px 18px; border-radius:40px;">${count}道菜</span>
-                    </div>
-                    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-                        <button onclick="deleteCategory(${index})" style="background:#e0a28e; border:none; color:white; padding:12px 24px; border-radius:40px; font-size:16px; cursor:pointer;">🗑️ 删除分类</button>
-                    </div>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
+      const container = document.getElementById('categoryList');
+      if (!container) return;
+      if (categories.length === 0) {
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#a28e7c;">暂无分类，请添加</div>';
+        return;
+      }
+      let html = '';
+      categories.forEach((cat, index) => {
+        const count = menu.filter(dish => dish.category === cat).length;
+        html += `
+          <div style="background:white; border-radius:20px; padding:16px; margin-bottom:12px; border:1px solid #ffd9bf;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:22px; font-weight:bold; color:#b85b3a;">${cat}</span>
+              <span style="background:#f0d5c0; padding:8px 18px; border-radius:40px;">${count}道菜</span>
+            </div>
+            <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+              <button onclick="deleteCategory(${index})" style="background:#e0a28e; border:none; color:white; padding:12px 24px; border-radius:40px; font-size:16px; cursor:pointer;">🗑️ 删除分类</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
     }
-    
+
     window.addCategory = function() {
-        const input = document.getElementById('newCategory');
-        const catName = input.value.trim();
-        
-        if (!catName) {
-            alert('请输入分类名称');
-            return;
-        }
-        
-        if (categories.includes(catName)) {
-            alert('这个分类已经存在了');
-            return;
-        }
-        
-        categories.push(catName);
-        saveCategories();
-        
-        // 更新下拉框
-        renderCategorySelect();
-        renderCategoryList();
-        
-        input.value = '';
-        alert('✅ 分类添加成功');
+      const input = document.getElementById('newCategory');
+      const catName = input.value.trim();
+      if (!catName) {
+        alert('请输入分类名称');
+        return;
+      }
+      if (categories.includes(catName)) {
+        alert('这个分类已经存在了');
+        return;
+      }
+      categories.push(catName);
+      saveDataToBackend(); // 保存到后端
+      renderCategorySelect();
+      renderCategoryList();
+      input.value = '';
     };
-    
+
     window.deleteCategory = function(index) {
-        if (!confirm(`确定要删除「${categories[index]}」吗？该分类下的所有菜品也会被删除。`)) {
-            return;
-        }
-        
-        const catToDelete = categories[index];
-        
-        // 删除该分类下的所有菜品
-        menu = menu.filter(dish => dish.category !== catToDelete);
-        saveMenu();
-        
-        // 删除分类
-        categories.splice(index, 1);
-        saveCategories();
-        
-        // 重新渲染
-        renderCategorySelect();
-        renderCategoryList();
-        renderMenu();
+      if (!confirm(`确定要删除「${categories[index]}」吗？该分类下的所有菜品也会被删除。`)) {
+        return;
+      }
+      const catToDelete = categories[index];
+      // 删除分类下的菜品
+      menu = menu.filter(dish => dish.category !== catToDelete);
+      // 删除分类
+      categories.splice(index, 1);
+      saveDataToBackend(); // 保存到后端
+      renderCategorySelect();
+      renderCategoryList();
+      renderMenu();
     };
-    
+
     // ========== 菜单管理 ==========
     function renderMenu() {
-        const container = document.getElementById('menuContainer');
-        const emptyMsg = document.getElementById('emptyMenu');
-        
-        if (!container) return;
-        
-        if (menu.length === 0) {
-            container.innerHTML = '';
-            emptyMsg.style.display = 'block';
-            return;
-        }
-        
-        emptyMsg.style.display = 'none';
-        
-        // 按分类分组
-        let html = '';
-        categories.forEach(cat => {
-            const dishesInCat = menu.filter(dish => dish.category === cat);
-            if (dishesInCat.length === 0) return;
-            
-            html += `<div class="category-section">`;
-            html += `<div class="category-header">`;
-            html += `<span class="category-name">${cat}</span>`;
-            html += `</div>`;
-            html += `<div class="dish-list">`;
-            
-            dishesInCat.forEach((dish, idx) => {
-                // 找到在menu中的真实索引
-                const realIndex = menu.findIndex(d => d.name === dish.name && d.category === dish.category);
-                html += `
-                    <div class="dish-item">
-                        <span class="dish-name">${dish.name}</span>
-                        <button class="delete-btn" onclick="deleteDish(${realIndex})">✕</button>
-                    </div>
-                `;
-            });
-            
-            html += `</div>`;
-            html += `</div>`;
+      const container = document.getElementById('menuContainer');
+      const emptyMsg = document.getElementById('emptyMenu');
+      if (!container) return;
+      if (menu.length === 0) {
+        container.innerHTML = '';
+        emptyMsg.style.display = 'block';
+        return;
+      }
+      emptyMsg.style.display = 'none';
+      let html = '';
+      categories.forEach(cat => {
+        const dishesInCat = menu.filter(dish => dish.category === cat);
+        if (dishesInCat.length === 0) return;
+        html += `<div class="category-section">`;
+        html += `<div class="category-header">`;
+        html += `<span class="category-name">${cat}</span>`;
+        html += `</div>`;
+        html += `<div class="dish-list">`;
+        dishesInCat.forEach((dish, idx) => {
+          const realIndex = menu.findIndex(d => d.name === dish.name && d.category === dish.category);
+          html += `
+            <div class="dish-item">
+              <span class="dish-name">${dish.name}</span>
+              <button class="delete-btn" onclick="deleteDish(${realIndex})">✕</button>
+            </div>
+          `;
         });
-        
-        container.innerHTML = html;
+        html += `</div>`;
+        html += `</div>`;
+      });
+      container.innerHTML = html;
     }
-    
+
     window.addDish = function() {
-        const name = document.getElementById('dishName').value.trim();
-        const category = document.getElementById('dishCategory').value;
-        
-        if (!name) {
-            alert('请输入菜名');
-            return;
-        }
-        
-        if (!category) {
-            alert('请选择分类');
-            return;
-        }
-        
-        // 检查是否已存在
-        const exists = menu.some(dish => dish.name === name && dish.category === category);
-        if (exists) {
-            alert('这道菜已经添加过了');
-            return;
-        }
-        
-        menu.push({
-            name: name,
-            category: category
-        });
-        
-        saveMenu();
-        renderMenu();
-        
-        document.getElementById('dishName').value = '';
-        alert('✅ 菜品添加成功');
+      const name = document.getElementById('dishName').value.trim();
+      const category = document.getElementById('dishCategory').value;
+      if (!name) {
+        alert('请输入菜名');
+        return;
+      }
+      if (!category) {
+        alert('请选择分类');
+        return;
+      }
+      const exists = menu.some(dish => dish.name === name && dish.category === category);
+      if (exists) {
+        alert('这道菜已经添加过了');
+        return;
+      }
+      menu.push({ name: name, category: category });
+      saveDataToBackend(); // 保存到后端
+      renderMenu();
+      document.getElementById('dishName').value = '';
     };
-    
+
     window.deleteDish = function(index) {
-        menu.splice(index, 1);
-        saveMenu();
-        renderMenu();
+      menu.splice(index, 1);
+      saveDataToBackend(); // 保存到后端
+      renderMenu();
     };
-    
+
     // ========== 订单管理 ==========
     function renderOrders() {
-        const container = document.getElementById('ordersList');
-        const noOrders = document.getElementById('noOrders');
-        
-        if (!container) return;
-        
-        // 重新加载订单
-        const savedOrders = localStorage.getItem('nainai_orders');
-        if (savedOrders) {
-            orders = JSON.parse(savedOrders);
-        }
-        
-        if (orders.length === 0) {
-            container.innerHTML = '';
-            noOrders.style.display = 'block';
-            return;
-        }
-        
-        noOrders.style.display = 'none';
-        
-        let html = '';
-        orders.forEach((order, index) => {
-            let itemsHtml = '';
-            order.items.forEach(dish => {
-                itemsHtml += `<span style="display:inline-block; background:#d9b297; color:white; padding:8px 18px; border-radius:40px; margin:4px; font-size:16px;">${dish}</span>`;
-            });
-            
-            html += `
-                <div style="background:#fff2e7; border-radius:18px; padding:18px; margin-bottom:16px; border-left:8px solid #b85b3a;">
-                    <div style="font-size:22px; font-weight:bold; margin-bottom:10px;">👤 ${order.person}</div>
-                    <div style="margin-bottom:14px;">${itemsHtml}</div>
-                    <div style="color:#7e6a5c; font-size:15px;">🕐 ${order.time}</div>
-                    <button onclick="deleteOrder(${index})" style="background:#e0a28e; border:none; color:white; padding:10px 22px; border-radius:40px; margin-top:16px; font-size:16px; cursor:pointer;">✅ 已备好</button>
-                </div>
-            `;
+      const container = document.getElementById('ordersList');
+      const noOrders = document.getElementById('noOrders');
+      if (!container) return;
+      if (orders.length === 0) {
+        container.innerHTML = '';
+        noOrders.style.display = 'block';
+        return;
+      }
+      noOrders.style.display = 'none';
+      let html = '';
+      orders.forEach((order, index) => {
+        let itemsHtml = '';
+        order.items.forEach(dish => {
+          itemsHtml += `<span style="display:inline-block; background:#d9b297; color:white; padding:8px 18px; border-radius:40px; margin:4px; font-size:16px;">${dish}</span>`;
         });
-        container.innerHTML = html;
+        html += `
+          <div style="background:#fff2e7; border-radius:18px; padding:18px; margin-bottom:16px; border-left:8px solid #b85b3a;">
+            <div style="font-size:22px; font-weight:bold; margin-bottom:10px;">👤 ${order.person}</div>
+            <div style="margin-bottom:14px;">${itemsHtml}</div>
+            <div style="color:#7e6a5c; font-size:15px;">🕐 ${order.time}</div>
+            <button onclick="deleteOrder(${index})" style="background:#e0a28e; border:none; color:white; padding:10px 22px; border-radius:40px; margin-top:16px; font-size:16px; cursor:pointer;">✅ 已备好</button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
     }
-    
+
     window.deleteOrder = function(index) {
-        orders.splice(index, 1);
-        saveOrders();
-        renderOrders();
+      orders.splice(index, 1);
+      saveDataToBackend(); // 保存到后端
+      renderOrders();
     };
-    
+
     // ========== 标签页切换 ==========
     window.switchTab = function(tab) {
-        document.getElementById('pageEdit').style.display = 'none';
-        document.getElementById('pageCategory').style.display = 'none';
-        document.getElementById('pageOrders').style.display = 'none';
-        
-        document.getElementById('tabEdit').classList.remove('active');
-        document.getElementById('tabCategory').classList.remove('active');
-        document.getElementById('tabOrders').classList.remove('active');
-        
-        if (tab === 'edit') {
-            document.getElementById('pageEdit').style.display = 'block';
-            document.getElementById('tabEdit').classList.add('active');
-            renderMenu();
-        } else if (tab === 'category') {
-            document.getElementById('pageCategory').style.display = 'block';
-            document.getElementById('tabCategory').classList.add('active');
-            renderCategoryList();
-        } else if (tab === 'orders') {
-            document.getElementById('pageOrders').style.display = 'block';
-            document.getElementById('tabOrders').classList.add('active');
-            renderOrders();
-        }
-    };
-    
-    // ========== 启动 ==========
-    window.onload = function() {
-        loadData();
-        renderCategorySelect();
+      document.getElementById('pageEdit').style.display = 'none';
+      document.getElementById('pageCategory').style.display = 'none';
+      document.getElementById('pageOrders').style.display = 'none';
+      document.getElementById('tabEdit').classList.remove('active');
+      document.getElementById('tabCategory').classList.remove('active');
+      document.getElementById('tabOrders').classList.remove('active');
+      if (tab === 'edit') {
+        document.getElementById('pageEdit').style.display = 'block';
+        document.getElementById('tabEdit').classList.add('active');
         renderMenu();
+      } else if (tab === 'category') {
+        document.getElementById('pageCategory').style.display = 'block';
+        document.getElementById('tabCategory').classList.add('active');
+        renderCategoryList();
+      } else if (tab === 'orders') {
+        document.getElementById('pageOrders').style.display = 'block';
+        document.getElementById('tabOrders').classList.add('active');
+        renderOrders();
+      }
     };
-</script>
-</body>
 
+    // ========== 初始化 ==========
+    window.onload = async function() {
+      await fetchDataFromBackend(); // 先从后端加载数据
+      renderCategorySelect();
+      renderMenu();
+    };
+  </script>
+</body>
 </html>
